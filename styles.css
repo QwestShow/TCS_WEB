@@ -1,0 +1,1192 @@
+/*изменение курсора на время подгрузки при работе selectCompositionPSP() scriptPlan*/
+.wait-cursor * {
+    cursor: wait !important;
+}
+.default-cursor * {
+    cursor: default !important;
+}
+
+/* Общие стили */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f7fa; /* Мягкий фон */
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #2c3e50; /* Темно-синий цвет */
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    position: fixed; /* Фиксируем header */
+    top: 0; /* Размещаем его вверху страницы */
+    left: 0; /* Выравниваем по левому краю */
+    width: 100%; /* Занимает всю ширину экрана */
+    z-index: 1000; /* Убедитесь, что header выше других элементов */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Добавляем тень */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    background-color: #34495e; /* Темно-серый цвет */
+}
+
+nav ul li {
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #2980b9; /* Синий при наведении */
+    border-radius: 5px;
+}
+
+/* Активный пункт меню */
+nav ul li a.active {
+    text-decoration: underline; /* Подчеркивание */
+    font-weight: bold; /* Жирный шрифт (опционально) */
+}
+
+/* Стиль для контейнера кнопки */
+.logout-button-container {
+    position: absolute;
+    top: 10px; /* Отступ сверху */
+    right: 60px; /* Отступ справа */
+}
+
+/* Стиль для самой кнопки */
+.logout-button {
+    display: inline-block;
+    padding: 8px 15px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+    background-color: #f5f7fa;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #d4d7db; 
+}
+
+main {
+    padding: 130px 20px 100px 20px;
+}
+
+footer {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    padding: 10px;
+    background-color: #2c3e50;
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Выпадающий список */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown button {
+    background-color: #ffffff; /* Белый фон кнопки */
+    color: #333; /* Темный текст */
+    border: 1px solid #ced4da; /* Светло-серая рамка */
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.dropdown button:hover {
+    background-color: #f8f9fa; /* Светлый фон при наведении */
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #d2e7fa;
+    min-width: 160px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень для выпадающего списка */
+    border-radius: 4px;
+    z-index: 1;
+    font-size: 14px;
+    width: 300px;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 10px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-content a:hover {
+    background-color: #bed2e4; /* Светлый фон при наведении */
+    border-radius: 4px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Фильтр и кнопки */
+.filter-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.filter-container-store {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Контейнер для кнопки "Отчеты" и поля поиска */
+.filter-header {
+    display: flex; /* Размещаем элементы в строку */
+    align-items: center; /* Выравниваем элементы по центру по вертикали */
+    gap: 20px; /* Отступ между элементами */
+    margin-bottom: 20px; /* Отступ снизу */
+}
+
+.reports-button {
+    background-color: #2c3e50; /* Синий цвет */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.reports-button:hover {
+    background-color: #0056b3; /* Темно-синий при наведении */
+}
+
+input[type="text"] {
+    padding: 8px;
+    width: 230px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus {
+    border-color: #2c3e50; /* Синяя рамка при фокусе */
+    outline: none;
+}
+
+/* Таблица */
+.table-container {
+    overflow-x: auto;
+}
+
+/* Таблицы для склада */
+.left-table,
+.right-table {
+    width: 50%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: top;
+    max-width: 250px; /* Ограничение ширины ячеек */
+    word-wrap: break-word; /* Перенос текста */
+}
+
+th {
+    background-color: #f4f4f4;
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    position: relative;
+}
+
+th:hover {
+    background-color: #e0e0e0;
+}
+
+.column-filter {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+.sort-icon::after {
+    content: '▲';
+    font-size: 10px;
+    margin-left: 5px;
+    visibility: hidden;
+    position: absolute;
+    right: 10px;
+}
+
+.sort-icon.asc::after {
+    content: '▲';
+    visibility: visible;
+}
+
+.sort-icon.desc::after {
+    content: '▼';
+    visibility: visible;
+}
+
+/* Затемнение фона */
+.modal-overlay,
+.zkv-modal-overlay {
+    /*display: none; /* По умолчанию скрыто */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный фон */
+    z-index: 999; /* Выше остальных элементов */
+}
+
+/* Модальное окно */
+.modal-box,
+.zkv-modal {
+    display: none; /* По умолчанию скрыто */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Центрирование по центру экрана */
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Тень для модального окна */
+    border-radius: 8px;
+    z-index: 1000; /* Выше затемнения */
+    width: 80%; /* Ширина окна */
+    max-width: 1200px; /* Максимальная ширина */
+    max-height: 80vh; /* Максимальная высота */
+    overflow-y: auto; /* Вертикальная прокрутка при необходимости */
+}
+
+/* Модальное окно */
+.modal-box-for-operation {
+    display: none; /* По умолчанию скрыто */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Центрирование по центру экрана */
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Тень для модального окна */
+    border-radius: 8px;
+    z-index: 1000; /* Выше затемнения */
+    width: 100%; /* Ширина окна */
+    max-width: 1800px; /* Максимальная ширина */
+    max-height: 150vh; /* Максимальная высота */
+    overflow-y: auto; /* Вертикальная прокрутка при необходимости */
+}
+
+/* Основной контент модального окна */
+.zkv-modal-body {
+    display: flex; /* Расположение элементов в строку */
+    gap: 20px; /* Отступ между элементами */
+}
+
+.zkv-modal-header{
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Панели с ПСП */
+.zkv-panel {
+    display: flex;
+    flex-direction: column;
+    gap: -20px;
+    width: 45%; /* Ширина панелей */
+    border: 1px solid #ced4da; /* Серая рамка */
+    padding: 10px;
+    height: 350px; /* Фиксированная высота */
+    border-radius: 6px; /* Закругленные углы */
+    background-color: #f8f9fa; /* Светлый фон */
+}
+
+.zkv-panel-text-4and6 {
+    display: flex;
+    flex-direction: column;
+    gap: -20px;
+    width: 98%; /* Ширина панелей */
+    border: 1px solid #ced4da; /* Серая рамка */
+    padding: 10px;
+    height: 350px; /* Фиксированная высота */
+    border-radius: 6px; /* Закругленные углы */
+    background-color: #f8f9fa; /* Светлый фон */
+}
+
+.panel-for-operation {
+    display: flex;
+    flex-direction: column;
+    gap: -20px;
+    width: 45%; /* Ширина панелей */
+    border: 1px solid #ced4da; /* Серая рамка */
+    padding: 10px;
+    height: 600px; /* Фиксированная высота */
+    border-radius: 6px; /* Закругленные углы */
+    background-color: #f8f9fa; /* Светлый фон */
+}
+
+/* Списки ПСП */
+.zkv-panel select {
+    width: 100%; /* Полная ширина */
+    padding: 6px;
+    border: 1px solid #ced4da; /* Рамка вокруг списка */
+    border-radius: 4px; /* Закругленные углы */
+}
+
+.zkv-panel-text{
+    display: flex;
+    gap: 10px;
+}
+
+/* Кнопки перемещения */
+.zkv-controls {
+    display: flex;
+    flex-direction: column; /* Кнопки в столбец */
+    justify-content: center; /* Выравнивание по центру */
+    align-items: center; /* Горизонтальное выравнивание */
+    gap: 10px; /* Отступ между кнопками */
+}
+
+.zkv-controls button {
+    padding: 8px;
+    width: 50px; /* Фиксированная ширина */
+    background-color: #2c3e50; /* Синий фон */
+    color: white; /* Белый текст */
+    border: none; /* Без рамки */
+    border-radius: 4px; /* Закругленные углы */
+    cursor: pointer; /* Указатель мыши */
+    transition: background-color 0.3s ease; /* Плавное изменение цвета */
+}
+
+.zkv-controls button:hover {
+    background-color: #2c3e50; /* Темно-синий фон при наведении */
+}
+
+/* Форма ввода данных */
+.zkv-form {
+    margin-top: 20px; /* Отступ сверху */
+    display: flex;
+    gap: 10px;
+}
+
+/* Контейнер для строки с инпутами */
+.zkv-form-row {
+    display: flex; /* Размещаем элементы в строку */
+    gap: 20px; /* Отступ между элементами */
+    align-items: center; /* Выравнивание по центру по вертикали */
+}
+
+/* Контейнер для каждого поля */
+.zkv-form-item {
+    display: flex;
+    gap: 10px;
+    flex: 1; /* Равномерное распределение ширины */
+}
+
+/* Стиль для label */
+.zkv-form-item label {
+    margin-bottom: 5px; /* Отступ между label и input */
+    font-weight: 500;
+    color: #333;
+}
+
+/* Стиль для input */
+.zkv-form-item input {
+    padding: 8px;
+    height: 10px;
+    width: 100%;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+}
+
+/* Стиль при фокусе */
+.zkv-form-item input:focus {
+    border-color: #2c3e50;
+    outline: none;
+}
+
+/* Стиль для рамки вокруг полей "Заказ", "Индекс" и "Количество" */
+.zkv-form-box {
+    display: flex;
+    width:100%;
+    gap: 20px; /* Отступ между элементами */
+    padding: 15px; /* Внутренний отступ */
+    border: 1px solid #ced4da; /* Граница */
+    border-radius: 6px; /* Закругленные углы */
+    background-color: #f8f9fa; /* Светлый фон */
+    margin-bottom: 20px; /* Отступ снизу */
+    height: 30px;
+}
+
+/* Стиль для области с радиокнопками */
+.zkv-resource-type-box {
+    position: relative;
+    width: 35%;
+    height: 30px;
+    padding: 15px; /* Внутренний отступ */
+    border: 1px solid #ced4da; /* Граница */
+    border-radius: 6px; /* Закругленные углы */
+    background-color: #f8f9fa; /* Светлый фон */
+
+}
+
+/* Стиль для области с радиокнопками */
+.resource-type-box {
+    flex: 1; /* Занимает половину доступной ширины */
+    position: relative;
+    width: 35%;
+    height: 30px;
+    top: 15px;
+    padding: 15px; /* Внутренний отступ */
+    border: 1px solid #ced4da; /* Граница */
+    border-radius: 6px; /* Закругленные углы */
+    background-color: #f8f9fa; /* Светлый фон */
+
+}
+
+/* Стиль для метки "Тип ресурса" на границе */
+.resource-type-label {
+    position: absolute;
+    top: -10px; /* Поднимаем текст над границей */
+    left: 10px; /* Отступ слева */
+    background-color: #f8f9fa; /* Цвет фона под текстом */
+    padding: 0 5px; /* Внутренний отступ */
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+/* Стиль для группы радиокнопок */
+.radio-group {
+    display: flex;
+    gap: 20px; /* Отступ между радиокнопками */
+    justify-content: center; /* Выравнивание по центру */
+    align-items: center; /* Выравнивание по вертикали */
+    margin-top: 10px; /* Отступ сверху */
+}
+
+/* Стиль для меток радиокнопок */
+.radio-group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer; /* Указатель мыши */
+}
+
+/* Стиль для самих радиокнопок */
+.radio-group input[type="radio"] {
+    margin-right: 5px; /* Отступ между радиокнопкой и текстом */
+    accent-color: #2c3e50;
+}
+
+/* Стили для списка доступных ПСП */
+#availablePSP,
+#selectedPSP {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 10px;
+    width: 100%;
+    height: 250px; /* Высота списка */
+    overflow-y: auto; /* Включает вертикальный скролл */
+}
+
+/* Убираем скролл-бар */
+#availablePSP::-webkit-scrollbar,
+#selectedPSP::-webkit-scrollbar {
+    display: none;
+}
+
+/* Стиль для полей поиска */
+#availablePSPFilter,
+#selectedPSPFilter,
+#NMKFilter,
+#NMK_SE_Filter,
+#Operation_SE_Filter,
+#PSP_SE_Oper_Filter {
+    display: block;
+    padding: 8px;
+    height: 10px;
+    width: 50%;
+    margin-bottom: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+}
+
+#availablePSPFilter:focus,
+#selectedPSPFilter:focus,
+#NMKFilter:focus,
+#NMK_SE_Filter:focus,
+#Operation_SE_Filter:focus,
+#PSP_SE_Oper_Filter:focus {
+    border-color: #2c3e50;;
+    outline: none;
+}
+
+/* Стиль для поля поиска */
+#departmentFilter,
+#pspFilter,
+#NMKFilter,
+#NMK_SE_Filter,
+#Operation_SE_Filter,
+#cehFilter_SE,
+#sectorFilter_SE,
+#PSP_SE_Oper_Filter,
+#Worker_SE,
+#Workbench_SE {
+    display: block;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+    font-size: 14px;
+}
+
+#departmentFilter:focus,
+#pspFilter:focus,
+#cehFilter_SE:focus,
+#sectorFilter_SE:focus,
+#Worker_SE:focus,
+#Workbench_SE:focus {
+    border-color: #2c3e50;
+    outline: none;
+}
+
+/* Кнопки "Отмена" и "Сформировать" */
+#cancel,
+#generateDocument,
+#cancelZKV,
+#generateZKVButton,
+#generate4and6formsButton,
+#cancel4and6forms,
+#cancel_NMK_SE,
+#continue_NMK_SE,
+#cancel_Operation_SE,
+#load_Workers_and_Workbench,
+#cancel_PSP_SE,
+#continue_PSP_SE,
+#back_PSP_Party,
+#continue_PSP_Party,
+#back_order,
+#generate_report,
+#delete_Workers_SE {
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: #2c3e50; /* Синий фон */
+    color: white; /* Белый текст */
+    border: none; /* Без рамки */
+    border-radius: 6px; /* Закругленные углы */
+    cursor: pointer; /* Указатель мыши */
+    transition: background-color 0.3s ease; /* Плавное изменение цвета */
+}
+
+#generateDocument:hover,
+#generateZKVButton:hover,
+#generate4and6formsButton:hover,
+#cancel_NMK_SE:hover,
+#continue_NMK_SE:hover,
+#cancel_Operation_SE:hover,
+#load_Workers_and_Workbench:hover,
+#cancel_PSP_SE:hover,
+#continue_PSP_SE:hover,
+#back_PSP_Party:hover,
+#continue_PSP_Party:hover,
+#back_order:hover,
+#generate_report:hover,
+#delete_Workers_SE:hover {
+    background-color: #253442; /* Темно-синий фон при наведении */
+}
+
+#cancel,
+#cancelZKV,
+#cancel4and6forms,
+#cancel_Operation_SE {
+    background-color: #6c757d; /* Серый фон для кнопки "Отмена" */
+}
+
+#cancel:hover,
+#cancelZKV:hover,
+#cancel4and6forms:hover,
+#cancel_NMK_SE:hover,
+#cancel_Operation_SE {
+    background-color: #5a6268; /* Темно-серый фон при наведении */
+}
+
+
+/*Стили для модального окнаа формирования М11*/
+.scrollable-table {
+    max-height: 500px; /* Ограничиваем высоту */
+    overflow-y: auto; /* Добавляем вертикальный скролл */
+    width: 100%;
+}
+
+.scrollable-table-for-operation {
+    height: 600px; /* Ограничиваем высоту */
+    overflow-y: auto; /* Добавляем вертикальный скролл */
+    /*overflow-x: auto;*/
+    width: 100%;
+}
+
+
+#selectedPSPTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#selectedPSPTable th,
+#selectedPSPTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#selectedPSPTable tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Стиль для подсвеченных строк */
+#selectedPSPTable tr.highlighted {
+    background-color: #ffffcc;
+}
+
+.hidden {
+    display: none; /* Скрывает элемент */
+}
+
+
+/*АВТОРИЗАЦИЯ*/
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+}
+
+.auth-box {
+    background-color: #ffffff;
+    border: 2px solid #2c3e50; /* Синяя рамка */
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: left;
+}
+
+.auth-box h2 {
+    font-size: 20px;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.auth-form-item {
+    margin-bottom: 15px;
+}
+
+.auth-form-item label {
+    font-weight: 500;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.auth-form-item input {
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    width: 100%;
+    transition: border-color 0.3s ease;
+}
+
+.auth-form-item input:focus {
+    border-color: #2c3e50;
+    outline: none;
+}
+
+.auth-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.auth-buttons button {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2c3e50;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.auth-image {
+    margin-top: 20px; /* Отступ сверху */
+    text-align: center; /* Центрирование изображения */
+}
+
+.auth-image img {
+    max-width: 100%; /* Изображение не выходит за границы контейнера */
+    height: auto; /* Сохранение пропорций */
+    border-radius: 8px; /* Закругленные углы */
+}
+
+/* Стиль для контейнера пароля */
+.login-container,
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Стиль для кнопки "Показать/Скрыть пароль" */
+.toggle-password {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: -30px; /* Сдвигаем кнопку внутрь поля */
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Стиль для изображения кнопки */
+.toggle-password img {
+    width: 20px;
+    height: 20px;
+    transition: opacity 0.3s ease;
+}
+
+.toggle-password img:hover {
+    opacity: 0.7;
+}
+
+#submitAuth {
+    background-color: #2c3e50;
+    color: white;
+}
+
+#submitAuth:hover {
+    background-color: #1a2530;
+}
+
+
+/*МОДАЛЬНОЕ ОКНО ТРЕБОВАНИЯ-НАКЛАДНОЙ*/
+/* Стиль для контейнера кнопок */
+.controls {
+    display: flex;
+    justify-content: space-between; /* Размещаем элементы по краям */
+    gap: 20px; /* Расстояние между блоками */
+    margin-top: 20px; /* Отступ сверху */
+    margin-bottom: 30px;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: flex-end; /* Выравнивание по правому краю */
+    margin-top: 20px; /* Отступ сверху */
+}
+
+/* Стиль для поля поиска */
+.search-container select {
+    width: 100%;
+}
+
+.search-container select:focus {
+    border-color: #2c3e50;
+    outline: none;
+}
+
+/*Складские остатки*/
+.Store-main {
+    display: flex;
+    gap: 20px; /* Расстояние между таблицами */
+    justify-content: space-between;
+    text-align: center;
+}
+.Store-main h1{
+    background-color: #e9ebee;
+    border-radius: 16px;
+    margin-top: 0;
+}
+.store-button{
+    background-color: #2c3e50; /* Синий цвет */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+.store-button:hover {
+    background-color: #0056b3; /* Темно-синий при наведении */
+}
+.store-filter{
+    position: relative;
+    display: inline-block;
+}
+.store-content{
+    display: none;
+    position: absolute;
+    background-color: #d2e7fa;
+    min-width: 200px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень для выпадающего списка */
+    z-index: 1;
+
+    border-radius: 5px;
+    font-size: 14px;
+    width: 400px;
+}
+.store-content ul li:hover {
+    background-color: #bed2e4; /* Светлый фон при наведении */
+    border-radius: 4px;
+}
+.store-content input{
+    padding: 12px 16px; /* Отступы внутри поисковой строки */
+    margin: 1% 1%;
+    border: none; /* Убираем рамку */
+    border-bottom: 1px solid #ccc; /* Добавляем нижнюю границу */
+    box-sizing: border-box; /* Чтобы padding и border не увеличивали ширину */
+    width: 98%; /* Занимает всю ширину выпадающего списка */
+}
+.store-filter:hover .store-content{
+    display: block;
+}
+.store-content ul{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+.store-content li{
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+}
+.store-content li:hover{
+    background-color: #ced4da;
+}
+.Document-Buttons {
+    display: flex;
+    width: 100%;
+}
+.Document-Buttons button {
+    color: white;
+    border-bottom: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    flex: 1; /* Это заставит кнопки растягиваться и занимать равное пространство */
+    text-align: center; /* Центрируем текст внутри кнопок */
+    background-color: #f1f1f1;
+    border-top-right-radius: 5px;
+}
+.Document-Buttons-individual{
+    border-left: none;
+}
+.Document-Buttons button:hover {
+    background-color: #ddd;
+}
+.Document-Buttons button.active {
+    background-color: #ddd;
+}
+.wrap-text {
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 65px;
+    min-width: 45px;
+    text-align: center;
+}
+#store-table-right th{
+    text-align: center;
+    vertical-align: middle;
+    max-width: 250px;
+}
+#store-table-right td:nth-child(6),
+#store-table-right td:nth-child(7) {
+    white-space: normal;
+    word-wrap: break-word;
+    text-align: center; /* выравнивание по центру */
+}
+.table-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 600px; /* или нужная вам высота */
+}
+
+/* Контейнер с ограниченной высотой */
+/* Базовые стили для таблицы */
+#store-table-right {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Контейнер с ограниченной высотой */
+.right-table {
+    max-height: 600px; /* Высота для ~50 строк */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Скролл только когда нужно */
+.right-table > table {
+    overflow-y: hidden;
+}
+
+/* Принудительный скролл при большом количестве строк */
+.right-table > table tbody {
+    display: block;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+/* Фиксируем заголовок */
+.right-table > table thead {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.right-table > table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+/*----------------------------------*/
+
+/*Конец складских остатков*/
+.modal-Loading-overlay  {
+    display: none; /* По умолчанию скрыто */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный фон */
+    z-index: 1001; /* Выше остальных элементов */
+}
+
+.modal-box-Loading {
+    display: none; /* По умолчанию скрыто */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Центрирование по центру экрана */
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Тень для модального окна */
+    border-radius: 8px;
+    z-index: 1002; /* Выше затемнения */
+    width: 80%; /* Ширина окна */
+    max-width: 800px; /* Максимальная ширина */
+    max-height: 80vh; /* Максимальная высота */
+    overflow-y: auto; /* Вертикальная прокрутка при необходимости */
+}
+
+.dice {
+    position: relative;
+    height: 120px;
+    width: 120px;
+    background: #2c3e50;
+    border-radius: 16px;
+    padding: 20px;
+    box-sizing: border-box;
+    animation: letsroll 6s forwards;
+    box-shadow: 0px 0px 200px #d82091;
+  }
+  
+  .dice-dot {
+    height: 20px;
+    width: 20px;
+    background: #00eeff;
+    display: flex;
+    border-radius: 16px;
+    position: absolute;
+  }
+  
+  .dice-dot.one {
+    transform: translate(30px, 30px);
+    animation: animate-position-1 0.75s 1s forwards;
+  }
+  
+  .dice-dot.two {
+    transform: translate(30px, 30px);
+    opacity: 0;
+    animation: animate-position-2 0.75s 1.2s forwards;
+  }
+  
+  .dice-dot.three {
+    opacity: 0;
+    transform: translate(30px, 30px);
+    animation: animate-position-3 0.75s 1.6s forwards,
+      animate-position-3-move 0.75s 2s forwards;
+  }
+  
+  .dice-dot.four {
+    transform: translate(30px, 30px);
+    opacity: 0;
+    animation: animate-position-4 0.75s 2s forwards;
+  }
+  
+  .dice-dot.five {
+    transform: translate(0px, 0px);
+    opacity: 0;
+    animation: animate-position-5 0.75s 2.3s forwards,
+      animate-position-5-move 0.75s 2.8s forwards;
+  }
+  
+  .dice-dot.six {
+    transform: translate(30px, 30px);
+    opacity: 0;
+    animation: animate-position-6 0.75s 3s forwards;
+  }
+  
+  @keyframes letsroll {
+    0% {
+      transform: rotate(90deg);
+    }
+    50% {
+      transform: rotate(-90deg);
+    }
+    75% {
+      transform: rotate(90deg);
+    }
+    100% {
+      transform: rotate(-90deg);
+    }
+  }
+  
+  @keyframes animate-position-1 {
+    100% {
+      transform: translate(0, 0);
+    }
+  }
+  
+  @keyframes animate-position-2 {
+    100% {
+      opacity: 1;
+      transform: translate(60px, 60px);
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+  
+  @keyframes animate-position-3 {
+    100% {
+      opacity: 1;
+      transform: translate(30px, 30px);
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+  
+  @keyframes animate-position-3-move {
+    100% {
+      transform: translate(0px, 60px);
+    }
+  }
+  
+  @keyframes animate-position-4 {
+    100% {
+      opacity: 1;
+      transform: translate(60px, 0px);
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+  
+  @keyframes animate-position-5 {
+    100% {
+      opacity: 1;
+      transform: translate(30px, 30px);
+    }
+  }
+  
+  @keyframes animate-position-5-move {
+    100% {
+      opacity: 1;
+      transform: translate(60px, 30px);
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+  
+  @keyframes animate-position-6 {
+    100% {
+      opacity: 1;
+      transform: translate(0px, 30px);
+    }
+  }
+  
+/*Моадльное окно загрузки*/

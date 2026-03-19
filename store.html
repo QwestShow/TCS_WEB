@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Цеховые отсатки</title>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+    <header>
+        <h1>Цеховые отсатки</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html" id="homeLink">Главная</a></li>
+                    <li><a href="production.html" id="productionLink">Производство</a></li>
+                    <li><a href="plan.html" id="planLink">План производства</a></li>
+                    <li><a href="store.html" id="storeLink">Цеховые остатки</a></li>
+            </ul>
+            <div class="logout-button-container">
+                <a href="auth.html" class="logout-button" id="logout">Выход из системы</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+		<div class="page-container">
+            <div class="filter-container-store">
+                <div class="filter-header">
+                    <div class="dropdown">
+                        <button id="reportsButton" class="reports-button">Отчеты</button>
+                        <!-- тут типы отчётов -->
+                    </div>
+
+                    <!-- <input type="text" id="tableFilter" placeholder="Поиск..." onkeyup="filterTable('psp-table')"> -->
+
+                    <!-- Выпадающий список для выбора цеха-->
+                    <div class = "store-filter">
+                        <button class = "store-button">Цех</button>
+                        <div class = "store-content">
+                            <input type ="text" id = "search-Input" placeholder="Поиск...">
+                            <ul id = "store-list">
+                                <!-- тут спиосок цехов, в зависимости от прав-->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class = "Store-main">
+                 <!-- Левая таблица -->
+                <div class="table-container left-table">
+                    <h1>Документы</h1>
+                    <div class = "Document-Buttons">
+                        <button data-action="incoming" id = "store-button-documents">Приход</button>
+                        <button class ="Document-Buttons-individual" data-action="outgoing" id = "store-button-documents">Расход</button>
+                        <button class ="Document-Buttons-individual" data-action="invoices" id = "store-button-documents">Накладные</button>
+                    </div>
+                    <table id="store-table-left">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0, 'store-table-left')">Id <span class="sort-icon"></span></th>
+                                <th onclick="sortTable(1, 'store-table-left')">№ <span class="sort-icon"></span></th>
+                                <th onclick="sortTable(1, 'store-table-left')">Дата<span class="sort-icon"></span></th>
+                                <th onclick="sortTable(1, 'store-table-left')">Заказ <span class="sort-icon"></span></th>
+                                <!-- Остальные заголовки -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <td>2455</td>
+                            <td>2455</td>
+                            <td>2455</td>
+                            <td>2455</td>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Правая таблица -->
+                <div class="right-table">
+                    <h1>Остатки</h1>
+                    <input type="text" id="tableFilter" placeholder="Поиск..." onkeyup="filterTable('store-table-right')">
+                    <div class="table-wrapper"></div>
+                        <table id="store-table-right">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable(0, 'store-table-right')">Id<span class="sort-icon"></span></th>
+                                    <th onclick="sortTable(1, 'store-table-right')">Тип<span class="sort-icon"></span></th>
+                                    <th onclick="sortTable(3, 'store-table-right')">Обозначение<span class="sort-icon"></span></th>
+                                    <th onclick="sortTable(2, 'store-table-right')">Наименование<span class="sort-icon"></span>
+                                    <th onclick="sortTable(4, 'store-table-right')">Остаток<span class="sort-icon"></span></th>
+                                    <th onclick="sortTable(5, 'store-table-right')" class="wrap-text">Свободный остаток<span class="sort-icon"></span></th>
+                                    <th onclick="sortTable(6, 'store-table-right')" class="wrap-text">Ед. изм<span class="sort-icon"></span></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div> 
+    </main>
+    <footer>
+        <p>&copy; 2025 Казанский электротехнический завод</p>
+    </footer>
+
+    <script src="script.js" defer></script>
+    <script src="store.js" defer></script>
+</body>
+</html>
+
+
+
+

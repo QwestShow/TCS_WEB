@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Производство</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>План производства</h1>
+        <nav>
+            <nav>
+                <ul>
+                    <li><a href="index.html" id="homeLink">Главная</a></li>
+                    <li><a href="production.html" id="productionLink">Производство</a></li>
+                    <li><a href="plan.html" id="planLink">План производства</a></li>
+                    <li><a href="store.html" id="storeLink">Цеховые остатки</a></li>
+                    <!--<li><a href="require.html">Требования</a></li>-->
+                </ul>
+                <div class="logout-button-container">
+                    <a href="auth.html" class="logout-button" id="logout">Выход из системы</a>
+                </div>
+            </nav>
+        </nav>
+    </header>
+
+    <main>
+		<div class="page-container">
+            <div class="filter-container">
+                <div class="filter-header">
+                    <div class="dropdown">
+                        <button id="reportsButton" class="reports-button">Отчеты</button>
+                        <div class="dropdown-content">
+                            <a href="#" id="openAssignmentOfWorksAndEquupmentModalButton">Назначить рабочих и оборудование на операции</a>
+                            <a href="#" id="openFormationOfShiftDailyAssignmentsButton">Сформировать сменно-суточное задание</a>
+                        </div>
+                    </div>
+        
+                    <input type="text" id="tableFilter" placeholder="Поиск..." onkeyup="filterTable('plan-table')">
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="plan-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0, 'plan-table')">Номенклатура <span class="sort-icon"></span></th>
+                            <th onclick="sortTable(1, 'plan-table')">№заказа/индекс <span class="sort-icon"></span></th>
+                            <th onclick="sortTable(2, 'plan-table')">Кол-во <span class="sort-icon"></span></th>
+                            <th onclick="sortTable(3, 'plan-table')">н/ч на ед. <span class="sort-icon"></span></th>
+                            <th onclick="sortTable(4, 'plan-table')">н/ч общее <span class="sort-icon"></span></th>
+                            <th onclick="sortTable(5, 'plan-table')">Операция <span class="sort-icon"></span></th>
+                            <th onclick="sortTable(6, 'plan-table')">Оборудование <span class="sort-icon"></span></th>
+                            <th onclick="sortTable(7, 'plan-table')">Исполнитель <span class="sort-icon"></span></th>                
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-overlay hidden" id="assignmentOfWorksAndEquupmentModalOverlay"></div> <!-- Назначить рабочих и оборудование на операции -->
+            <div class="modal-box hidden" id="assignmentOfWorksAndEquupmentModal"> <!-- Данное модальное окно формирует список номенклатур -->
+                <div class="zkv-modal-header">Выберите Цех, Участок и Номенклатуру</div>
+                <div class="search-container" style="display: flex; gap: 10px; align-items: center;">
+                    <select id="cehFilter_SE" style="flex: 2; min-width: 100px;"></select>
+                    <select id="sectorFilter_SE" style="flex: 2; min-width: 200px;">
+                        <option value="" disabled selected>Выберите участок...</option>
+                    </select>
+                </div>
+                <div class="zkv-panel-text-4and6"> <!-- в CSS формируются стили для данного модального окна -->
+                    <div class="zkv-panel-text">
+                        <label>Выберите номенклатуру:</label>
+                        <input type="text" id="NMK_SE_Filter" placeholder="Поиск..." onkeyup="filterNMK_SE()"> <!-- фильтр номенклатур по сборочным единицам -->
+                    </div>
+                    
+                    <select multiple id="NMK_SE" ondblclick="moveSelected('NMK_SE')" style="height: 300px;"></select>
+                </div>
+                <div style="text-align: right;">
+                    <button id="cancel_NMK_SE">Назад</button>
+                    <button id="continue_NMK_SE">Продолжить</button>
+                </div>
+                <!--<div class="search-container">
+                    <select id="nmkFilter">
+                        <option value="" disabled selected>Выберите номенлатуру...</option>
+                    </select>
+                </div>
+
+                <div class="scrollable-table">
+                    <table id="selectedPlanTable">
+                        <thead>
+                            <tr>
+                                <th>Обозначение ПСП </th>
+                                <th>Кол-во </th>
+                                <th>Операция </th>
+                                <th>Рабочий </th>
+                                <th>Станок </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           
+                        </tbody>
+                    </table>
+                </div>-->
+            </div>
+            <div class="modal-box-for-operation hidden" id="OperationsOnEquipmentEquupmentModal"> <!-- Данное модальное окно ПСп и операций по заказам -->
+                <div class="zkv-modal-header">Выберите ПСп и операции</div>
+                <div class="zkv-modal-body"> <!-- в CSS формируются стили для данного модального окна -->
+                    <!--Cписок ПСп-->
+                    <div class="panel-for-operation" style="width: 12%;">
+                        <div class="zkv-panel-text">
+                            <label>ПСп:</label>
+                            <input type="text" id="PSP_SE_Oper_Filter" placeholder="Поиск..." onkeyup="filterPSP_Operacion_SE()"> <!-- фильтр по ПСп -->
+                        </div>                    
+                        <select multiple id="PSP_SE_Oper" ondblclick="moveSelected('PSP_SE_Oper')" style="height: 600px;"></select>
+                    </div>
+                    <!--Cписок операций--> 
+                    <div class="panel-for-operation" style="width: 88%;">
+                        <div class="zkv-panel-text">
+                            <!--<label>Выберите операции:</label>
+                            <input type="text" id="Operation_SE_Filter" placeholder="Поиск..." onkeyup="filter_Operation_SE()"> фильтр по операциям -->
+                        </div>
+                        <div class="scrollable-table-for-operation">
+                            <table id="TableOperation_SE">
+                                <thead>
+                                    <tr>
+                                        <th onclick="toggleCheckboxes()">Выбрать<span class="sort-icon"></span></th>
+                                        <th onclick="sortTable(1, 'TableOperation_SE')">ПСп<span class="sort-icon"></span></th>
+                                        <th onclick="sortTable(2, 'TableOperation_SE')">Код<span class="sort-icon"></span></th>
+                                        <th onclick="sortTable(3, 'TableOperation_SE')">Операция<span class="sort-icon"></span></th>
+                                        <th onclick="sortTable(4, 'TableOperation_SE')">Начало работы<span class="sort-icon"></span></th>
+                                        <th onclick="sortTable(5, 'TableOperation_SE')">Конец работы<span class="sort-icon"></span></th>
+                                        <th onclick="sortTable(6, 'TableOperation_SE')">Вид работ<span class="sort-icon"></span></th>
+                                        <th onclick="sortTable(7, 'TableOperation_SE')">Оборудование<span class="sort-icon"></span></th>
+                                        <th onclick="sortTable(8, 'TableOperation_SE')">Работник<span class="sort-icon"></span></th>
+                                        <th onclick="sortTable(9, 'TableOperation_SE')">Статус<span class="sort-icon"></span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Данные будут динамически генерироваться через JavaScript -->
+                                </tbody>
+                            </table>
+                            
+                        </div>
+                        <div class="search-container" style="display: flex; gap: 10px; align-items: footer;">
+                            <select id="Worker_SE" style="flex: 2; min-width: 100px;">
+                            </select>
+                            <select id="Workbench_SE" style="flex: 2; min-width: 100px;">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <!-- Левая часть: кнопка "Назад" -->
+                    <button id="cancel_Operation_SE">Назад</button>
+                    
+                    <!-- Правая часть: две кнопки "Отменить" и "Записать" -->
+                    <div>
+                      <button id="delete_Workers_SE">Отменить</button>
+                      <button id="load_Workers_and_Workbench">Записать</button>
+                    </div>
+                  </div>
+                </div>
+            
+            <div class="modal-overlay hidden" id="formationOfShiftDailyAssignmentsOverlay"></div> <!-- Сформировать сменно-суточное задание -->
+            <div class="modal-box hidden" id="formationOfShiftDailyAssignments"> <!-- Данное модальное окно формирует список ПСп -->
+                <div class="zkv-modal-header">Выберите ПСп</div>
+                <div class="zkv-panel-text-4and6"> <!-- в CSS формируются стили для данного модального окна -->
+                    <div class="zkv-panel-text">
+                        <label>Выберите ПСп:</label>
+                        <input type="text" id="PSP_SE_Filter" placeholder="Поиск..." onkeyup="filterPSP_SE()"> <!-- фильтр номенклатур по сборочным единицам -->
+                    </div>                    
+                    <select multiple id="PSP_SE" style="height: 300px;"></select>
+                </div>
+                <div style="text-align: right;">
+                    <button id="cancel_PSP_SE">Отмена</button>
+                    <button id="continue_PSP_SE">Продолжить</button>
+                </div>
+            </div> 
+
+            <div class="modal-overlay hidden" id="compositionPSPAndBatchesOverlay"></div> <!-- Выбор состава ПСп и производственной партии сменно-суточное задание -->
+            <div class="modal-box hidden" id="compositionPSPAndBatches"> <!-- Данное модальное окно формирует список состава ПСп и производственной партии -->
+                <div class="zkv-modal-header">Выберите состав ПСп</div>
+                <div class="zkv-modal-body">
+                    <div class="zkv-panel"> <!-- в CSS формируются стили для данного модального окна -->
+                        <label>Состав ПСп</label>
+                        <select multiple id="composition_PSP" oninput="selectCompositionPSP()" style="height: 300px;"></select>
+                    </div>
+                    <div class="zkv-panel"> <!-- в CSS формируются стили для данного модального окна -->
+                        <label>Производственные партии</label>
+                        <select multiple id="batches" style="height: 300px;"></select>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <button id="back_PSP_Party">Назад</button>
+                    <button id="continue_PSP_Party">Продолжить</button>
+                </div>
+            </div> 
+
+            <div class="modal-overlay hidden" id="orderPSPOverlay"></div> <!-- Сформировать сменно-суточное задание -->
+            <div class="modal-box hidden" id="orderPSP"> <!-- Данное модальное окно формирует список заказов -->
+                <!--Cписок операций--> 
+                <div class="panel-for-operation" style="width: 100%;">
+                    <div class="scrollable-table-for-operation">
+                        <table id="TableOperationOrder">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable(0, 'TableOperation_SE')">Выбрать<span class="sort-icon"></span></th>
+                                    <th onclick="sortTable(1, 'TableOperation_SE')">Шифр изделия<span class="sort-icon"></span></th>
+                                    <th onclick="sortTable(2, 'TableOperation_SE')">Обозначение детали<span class="sort-icon"></span></th>
+                                    <th onclick="sortTable(3, 'TableOperation_SE')">Наименование детали<span class="sort-icon"></span></th>
+                                    <th onclick="sortTable(4, 'TableOperation_SE')">Кол-во<span class="sort-icon"></span></th>
+                                    <th onclick="sortTable(5, 'TableOperation_SE')">Начало работы<span class="sort-icon"></span></th>
+                                    <th onclick="sortTable(6, 'TableOperation_SE')">Конец работы<span class="sort-icon"></span></th>
+                                    <th onclick="sortTable(7, 'TableOperation_SE')">Задание в н/ч<span class="sort-icon"></span></th>
+                                    <th>Примечание</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Данные будут динамически генерироваться через JavaScript -->
+                            </tbody>
+                        </table>                        
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <button id="back_order">Назад</button>
+                    <button id="generate_report" onclick="generateReport()">Сформировать</button>
+                </div>
+            </div> 
+
+        
+    </main>
+    <footer>
+        <p>&copy; 2025 Казанский электротехнический завод</p>
+    </footer>
+    <script src="script.js" defer></script>
+    <script src="scriptPlan.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в систему</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Вход в систему</h1>       
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section>
+            <div class="auth-container">
+                <div class="auth-box">
+                    <h2>Авторизация</h2>
+                    <form id="authForm">
+                        <div class="auth-form-item">
+                            <label for="password">Логин:</label>
+                            <div class="login-container">
+                                <input type="text" id="login" required>
+                            </div>
+                        </div>
+                        <div class="auth-form-item">
+                            <label for="password">Пароль:</label>
+                            <div class="password-container">
+                                <input type="password" id="password" required>
+                                <button type="button" id="togglePassword" class="toggle-password">
+                                    <img src="images/eye-closed.png" alt="Показать пароль" id="eyeIcon">
+                                </button>
+                            </div>
+                        </div>
+                        <div class="auth-buttons">
+                            <button  href="production.html" type="submit" id="submitAuth">Войти</button>
+                        </div>
+                    </form>
+                    <div class="auth-image">
+                        <img src="images/logo-grey.png" alt="Изображение для авторизации">
+                    </div>
+                </div>
+               
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Казанский электротехнический завод</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Производство</title>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+    <header>
+        <h1>Производство</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html" id="homeLink">Главная</a></li>
+                    <li><a href="production.html" id="productionLink">Производство</a></li>
+                    <li><a href="plan.html" id="planLink">План производства</a></li>
+                    <li><a href="store.html" id="storeLink">Цеховые остатки</a></li>
+                <!--<li><a href="require.html">Требования</a></li>-->
+            </ul>
+            <div class="logout-button-container">
+                <a href="auth.html" class="logout-button" id="logout">Выход из системы</a>
+            </div>
+        </nav>
+    </header>
+    <main>
+		<div class="page-container">
+            <div class="filter-container">
+                <div class="filter-header">
+                    <div class="dropdown">
+                        <button id="reportsButton" class="reports-button">Отчеты</button>
+                        <div class="dropdown-content">
+                            <a href="#" id="generateZKV">Сформировать ЗКВ</a>
+                            <a href="#" id="openRequirementModal">Формирование заявки на ТМЦ</a>
+                            <a href="#" id="generate4and6forms">Сформировать 4 и 6 формы</a>
+                            <a href="#" id="generateAssemblyDownload">Выгрузить сборку</a>
+                        </div>
+                    </div>
+        
+                    <input type="text" id="tableFilter" placeholder="Поиск..." onkeyup="filterTable('psp-table')">
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="psp-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0, 'psp-table')">Вид ПСП <span class="sort-icon"></span></th>
+                            <th onclick="sortTable(1, 'psp-table')">Обозначение <span class="sort-icon"></span></th>
+                            <th onclick="sortTable(2, 'psp-table')">Наименование <span class="sort-icon"></span></th>
+                            <th onclick="sortTable(3, 'psp-table')">Классификатор <span class="sort-icon"></span></th>
+                            <th onclick="sortTable(4, 'psp-table')">Состояние <span class="sort-icon"></span></th>
+                            <th onclick="sortTable(5, 'psp-table')">Комментарий <span class="sort-icon"></span></th>
+                            <th onclick="sortTable(6, 'psp-table')">Дата запуска <span class="sort-icon"></span></th>
+                            <th onclick="sortTable(7, 'psp-table')">Дата выпуска <span class="sort-icon"></span></th>
+                            <th onclick="sortTable(8, 'psp-table')">Используется в заказе <span class="sort-icon"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+	
+	        <!-- Модальное окно для формирования ЗКВ -->
+            <div class="zkv-modal-overlay hidden" id="zkvModalOverlay"></div>
+            <div class="zkv-modal hidden" id="zkvModal">
+                <div class="zkv-modal-header">Формирование документа ЗКВ</div>
+                <div class="zkv-modal-body">
+                    <div class="zkv-panel">
+                        <div class="zkv-panel-text">
+                            <label>Доступные ПСП:</label>
+                            <input type="text" id="availablePSPFilter" placeholder="Поиск..." onkeyup="filterAvailablePSP()">
+                        </div>
+                        
+                        <select multiple id="availablePSP" ondblclick="moveSelected('availablePSP', 'selectedPSP')" style="height: 300px;"></select>
+                    </div>
+                    <div class="zkv-controls">
+                        <button onclick="moveSelected('availablePSP', 'selectedPSP')">&gt;</button>
+                        <button onclick="moveSelected('selectedPSP', 'availablePSP')">&lt;</button>
+                        <button onclick="moveAll('availablePSP', 'selectedPSP')">&gt;&gt;</button>
+                        <button onclick="moveAll('selectedPSP', 'availablePSP')">&lt;&lt;</button>
+                    </div>
+                    <div class="zkv-panel">
+                        <div class="zkv-panel-text">
+                            <label>Выбранные ПСП:</label>
+                            <input type="text" id="selectedPSPFilter" placeholder="Поиск..." onkeyup="filterSelectedPSP()">
+                        </div>
+                        <select multiple id="selectedPSP" ondblclick="moveSelected('selectedPSP', 'availablePSP')" style="height: 300px;"></select>
+                    </div>
+                </div>
+                <div class="zkv-form">
+                    <div class="zkv-form-row">
+                        <!-- Область для полей "Заказ", "Индекс" и "Количество" -->
+                        <div class="zkv-form-box">
+                            <div class="zkv-form-item">
+                                <label for="order">Заказ:</label>
+                                <input type="text" id="order">
+                            </div>
+                            <div class="zkv-form-item">
+                                <label for="index">Индекс:</label>
+                                <input type="text" id="index">
+                            </div>
+                            <div class="zkv-form-item">
+                                <label for="quantity">Количество:</label>
+                                <input type="number" id="quantity">
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- Область для радиокнопок выбора типа ресурса -->
+                    <div class="zkv-resource-type-box">
+                        <label class="resource-type-label">Тип ресурса:</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="resourceType" value="all" checked>
+                                Все
+                            </label>
+                            <label>
+                                <input type="radio" name="resourceType" value="purchased" >
+                                Прочие
+                            </label>
+                            <label>
+                                <input type="radio" name="resourceType" value="purchasedAndSTD">
+                                Прочие+СТД
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <button id="cancelZKV">Отмена</button>
+                    <button id="generateZKVButton">Сформировать</button>
+                </div>
+            </div>
+
+            <!-- Модальное окно для формирования М4, М6 -->
+            <div class="modal-overlay hidden" id="4and6formsModalOverlay"></div>
+            <div class="modal-box hidden" id="4and6formsModal">
+                <div class="zkv-modal-header">Формирование документов формы 4, формы 6</div>
+                <div class="zkv-panel-text-4and6">
+                    <div class="zkv-panel-text">
+                        <label>Выберите номенклатуру:</label>
+                        <input type="text" id="NMKFilter" placeholder="Поиск..." onkeyup="filterAvailableForm4_6()">
+                    </div>
+                    
+                    <select multiple id="Nomencl_4And6" ondblclick="moveSelected('Nomencl_4And6')" style="height: 300px;"></select>
+                </div>
+
+                <div style="text-align: right;">
+                    <button id="cancel4and6forms">Отмена</button>
+                    <button id="generate4and6formsButton">Сформировать</button>
+                </div>
+            </div>
+            
+            <!-- Модальное окно для выгрузки Сборочной еденицы -->
+            <div class="modal-overlay hidden" id="AssemblyDownloadModalOverlay"></div>
+            <div class="modal-box hidden" id="AssemblyDownloadModal">
+                <div class="zkv-modal-header">Выгрузка сборочной еденицы</div>
+                <div class="zkv-panel-text-4and6">
+                    <div class="zkv-panel-text">
+                        <label>Выберите номенклатуру:</label>
+                        <input type="text" id="AssemblyNMKFilter" placeholder="Поиск..." onkeyup="AssemblyDownloadModalFilter()">
+                    </div>
+                    
+                    <select multiple id="Nomencl_AssemblyDownload" ondblclick="moveSelected('Nomencl_AssemblyDownload')" style="height: 300px;"></select>
+                </div>
+  
+                <div style="text-align: right;">
+                    <button id="cancelAssemblyDownloadButton">Отмена</button>
+                    <button id="generateAssemblyDownloadButton">Сформировать</button>
+                </div>
+            </div>
+      
+            <div class="modal-overlay hidden" id="requirementModalOverlay"></div>
+            <div class="modal-box hidden" id="requirementModal">
+                <div class="zkv-modal-header">Формирование заявки на ТМЦ</div>
+                 <!-- Контейнер для двух полей -->
+                <div class="search-container" style="display: flex; gap: 10px; align-items: center;">
+                    <!-- Поле выбора ПСП (остаётся как есть) -->
+                    <select id="pspFilter" style="flex: 2; min-width: 150px;">
+                        <option value="" disabled selected>Выберите ПСП...</option>
+                        <!-- Опции будут динамически добавляться -->
+                    </select>
+                
+                    <!-- Новое поле для выбора подразделения -->
+                    <select id="departmentFilter" style="flex: 1; min-width: 120px;">
+                        <option value="" disabled selected>Выберите подразделение...</option>
+                        <!-- Опции будут динамически добавляться -->
+                    </select>
+                </div>
+                            
+                <div class="scrollable-table">
+                    <table id="selectedPSPTable">
+                        <thead>
+                            <tr>
+                                <th>Обозначение</th>
+                                <th>Наименование</th>
+                                <th>Ед. изм.</th>
+                                <th>Требуется</th>
+                                <th>Остаток на складе</th>
+                                <th>Дефицит</th>
+                                <th>ДОБАВЛЕНО В ДОКУМЕНТ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Данные будут динамически генерироваться через JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="controls">
+                    <div class="resource-type-box">
+                        <label class="resource-type-label">Формирование заявки:</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="fullType" value="all" checked>
+                                Вручную
+                            </label>                       
+                            <label>
+                                <input type="radio" name="fullType" value="purchased">
+                                По потребности
+                            </label>
+                            <label>
+                                <input type="radio" name="fullType" value="purchasedAndSTD">
+                                По дефициту
+                            </label>
+                        </div>
+                    </div>
+                    <div class="resource-type-box">
+                        <label class="resource-type-label">Тип ресурса:</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="resourceType" value="all" checked>
+                                Все
+                            </label>
+                            <label>
+                                <input type="radio" name="resourceType" value="purchased" >
+                                Прочие
+                            </label>
+                            <label>
+                                <input type="radio" name="resourceType" value="purchasedAndSTD">
+                                Прочие+СТД
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <button id="cancel">Отмена</button>
+                    <button id="generateDocument">Сформировать заявку</button>
+                </div>
+            </div>
+
+            <div class="modal-overlay hidden" id="LoadingModalOverlay"></div>
+            <div class="modal-box-Loading hidden" id="LoadingModal">
+                <div class="zkv-modal-header">Загрузка...</div>
+                <div class="animation-box">
+                        <svg class = "left-petal">
+                            <path id = "left-petal" d = "M10, 10 L90, 10 L90, 90 L10, 90 Z" fill = "yellow" stroke = "black", stroke-width = "5"></path>
+                        </svg>
+                </div>
+            </div>
+        </div> 
+    </main>
+    <footer>
+        <p>&copy; 2025 Казанский электротехнический завод</p>
+    </footer>
+
+    <script src="script.js">
+        // Функция для сбора данных документа
+        function collectDocumentData() {
+            // Определение doc_type
+            const selectedFullType = document.querySelector('input[name="fullType"]:checked').value;
+            const docType = selectedFullType === "purchased" ? 21 : 3;
+        
+            // Сбор остальных данных
+            const resourceType = document.querySelector('input[name="resourceType"]:checked').value;
+        
+            return {
+                doc_type: docType,
+                resource_type: resourceType,
+                // Добавьте другие поля документа, если необходимо
+            };
+        }
+
+        async function saveData() {
+            try {
+                // Собираем данные документа
+                const documentData = collectDocumentData();
+            
+                // Собираем данные ресурсов
+                const resourceData = collectResourceData();
+            
+                // Отправляем данные на сервер
+                const response = await fetch(`${pathBack}/api/documents`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        document: documentData,
+                        resources: resourceData,
+                    }),
+                });
+            
+                if (!response.ok) {
+                    throw new Error(`Ошибка HTTP: ${response.status}`);
+                }
+            
+                const result = await response.json();
+                console.log("Данные успешно сохранены:", result);
+            
+                alert("Отчет успешно сформирован!");
+                closeModal(); // Закрываем модальное окно
+            } catch (error) {
+                console.error("Ошибка:", error);
+                alert("Произошла ошибка при отправке данных.");
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+
